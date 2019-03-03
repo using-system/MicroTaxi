@@ -7,9 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{33069458-861
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{7E465CDD-A6B8-48C1-A684-48DC6759B6AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Passenger.Api", "src\Services\Passenger.Api\Passenger.Api.csproj", "{3D7E513C-EDC9-413A-AE7D-143E4A97EF12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Passenger.Api", "src\Services\Passenger.Api\Passenger.Api.csproj", "{3D7E513C-EDC9-413A-AE7D-143E4A97EF12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trip.Api", "src\Services\Trip.Api\Trip.Api.csproj", "{53EEFE9E-FAF8-4B67-8AA4-EAA048835E39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trip.Api", "src\Services\Trip.Api\Trip.Api.csproj", "{53EEFE9E-FAF8-4B67-8AA4-EAA048835E39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Api", "src\Services\Identity.Api\Identity.Api.csproj", "{7F69944F-F2BF-4132-A97A-D9EFD5975826}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{53EEFE9E-FAF8-4B67-8AA4-EAA048835E39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53EEFE9E-FAF8-4B67-8AA4-EAA048835E39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53EEFE9E-FAF8-4B67-8AA4-EAA048835E39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F69944F-F2BF-4132-A97A-D9EFD5975826}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F69944F-F2BF-4132-A97A-D9EFD5975826}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F69944F-F2BF-4132-A97A-D9EFD5975826}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F69944F-F2BF-4132-A97A-D9EFD5975826}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -33,6 +39,7 @@ Global
 		{7E465CDD-A6B8-48C1-A684-48DC6759B6AE} = {33069458-861D-49CD-A354-EABE031EBAD3}
 		{3D7E513C-EDC9-413A-AE7D-143E4A97EF12} = {7E465CDD-A6B8-48C1-A684-48DC6759B6AE}
 		{53EEFE9E-FAF8-4B67-8AA4-EAA048835E39} = {7E465CDD-A6B8-48C1-A684-48DC6759B6AE}
+		{7F69944F-F2BF-4132-A97A-D9EFD5975826} = {7E465CDD-A6B8-48C1-A684-48DC6759B6AE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D3A46332-1866-40E3-BBB6-A54A5C7F0153}
