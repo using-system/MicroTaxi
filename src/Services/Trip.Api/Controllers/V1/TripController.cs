@@ -1,4 +1,4 @@
-﻿namespace Trip.Api.Controllers
+﻿namespace Trip.Api.Controllers.V1
 {
     using System;
     using System.Threading.Tasks;
