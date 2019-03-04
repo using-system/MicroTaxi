@@ -17,6 +17,10 @@
 
     using Identity.Api.Application.Certificate;
     using Identity.Api.Application.Services;
+    using System.Collections.Generic;
+    using IdentityServer4.EntityFramework.Entities;
+    using IdentityServer4.Models;
+    using IdentityServer4.Test;
 
     public class Startup
     {
@@ -29,51 +33,72 @@
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(Configuration["ConnectionString"],
-                                    sqlServerOptionsAction: sqlOptions =>
-                                    {
-                                        sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-                                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                                    }));
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //options.UseSqlServer(Configuration.GetConnectionString("ConnectionString")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            //services.AddIdentity<ApplicationUser, IdentityRole>()
+            //    .AddEntityFrameworkStores<ApplicationDbContext>()
+            //    .AddDefaultTokenProviders();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            // Adds IdentityServer
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-            services.AddIdentityServer(x =>
+            // configure identity server with in-memory stores, keys, clients and scopes
+            services.AddIdentityServer()
+                .AddDeveloperSigningCredential()
+                //.AddInMemoryPersistedGrants()
+                 //.AddInMemoryIdentityResources(Config.GetIdentityResources())
+                 .AddInMemoryApiResources(GetApiResources())
+                .AddTestUsers(GetUsers())
+                .AddInMemoryClients(GetClients())
+                //.AddAspNetIdentity<ApplicationUser>()
+                ;
+
+        }
+
+        public static IEnumerable<IdentityServer4.Models.Client> GetClients()
+        {
+            return new List<IdentityServer4.Models.Client>
             {
-                x.IssuerUri = "null";
-                x.Authentication.CookieLifetime = TimeSpan.FromHours(2);
-            })
-            .AddSigningCredential(Certificate.Get())
-            .AddAspNetIdentity<ApplicationUser>()
-            .AddConfigurationStore(options =>
+                // other clients omitted...
+                // resource owner password grant client
+                new IdentityServer4.Models.Client
+                {
+                    ClientId = "mvc",
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    ClientSecrets =
+                    {
+                        new IdentityServer4.Models.Secret("secret".Sha256())
+                    },
+                    AllowedScopes = { "trip", "openid" }
+                }
+            };
+        }
+
+        public static List<TestUser> GetUsers()
+        {
+            return new List<TestUser>
             {
-                options.ConfigureDbContext = builder => builder.UseSqlServer(Configuration["ConnectionString"],
-                                    sqlServerOptionsAction: sqlOptions =>
-                                    {
-                                        sqlOptions.MigrationsAssembly(migrationsAssembly);
-                                        //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-                                        sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                                    });
-            })
-            .AddOperationalStore(options =>
+                new TestUser
+                {
+                    SubjectId = "1",
+                    Username = "alice",
+                    Password = "password"
+                },
+                new TestUser
+                {
+                    SubjectId = "2",
+                    Username = "bob",
+                    Password = "password"
+                }
+            };
+        }
+
+        public static IEnumerable<IdentityServer4.Models.ApiResource> GetApiResources()
+        {
+            return new List<IdentityServer4.Models.ApiResource>
             {
-                options.ConfigureDbContext = builder => builder.UseSqlServer(Configuration["ConnectionString"],
-                                sqlServerOptionsAction: sqlOptions =>
-                                {
-                                    sqlOptions.MigrationsAssembly(migrationsAssembly);
-                                        //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-                                        sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                                });
-            })
-            .Services.AddTransient<IProfileService, ProfileService>();
+                new IdentityServer4.Models.ApiResource("api1", "My API")
+            };
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
