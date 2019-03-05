@@ -33,26 +33,31 @@
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //options.UseSqlServer(Configuration.GetConnectionString("ConnectionString")));
-
-            //services.AddIdentity<ApplicationUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>()
-            //    .AddDefaultTokenProviders();
+            services.AddIdentityServer()
+                .AddDeveloperSigningCredential()
+                .AddInMemoryApiResources(GetApiResources())
+                .AddInMemoryClients(GetClients());
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            // configure identity server with in-memory stores, keys, clients and scopes
-            services.AddIdentityServer()
-                .AddDeveloperSigningCredential()
-                //.AddInMemoryPersistedGrants()
-                 //.AddInMemoryIdentityResources(Config.GetIdentityResources())
-                 .AddInMemoryApiResources(GetApiResources())
-                .AddTestUsers(GetUsers())
-                .AddInMemoryClients(GetClients())
-                //.AddAspNetIdentity<ApplicationUser>()
-                ;
+        }
+       
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
+            app.UseIdentityServer();
+
+            app.UseHttpsRedirection();
+            app.UseMvc();
         }
 
         public static IEnumerable<IdentityServer4.Models.Client> GetClients()
@@ -63,13 +68,13 @@
                 // resource owner password grant client
                 new IdentityServer4.Models.Client
                 {
-                    ClientId = "mvc",
+                    ClientId = "client",
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     ClientSecrets =
                     {
                         new IdentityServer4.Models.Secret("secret".Sha256())
                     },
-                    AllowedScopes = { "trip", "openid" }
+                    AllowedScopes = { "api1" }
                 }
             };
         }
@@ -101,22 +106,5 @@
             };
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseIdentityServer();
-
-            app.UseHttpsRedirection();
-            app.UseMvc();
-        }
     }
 }
