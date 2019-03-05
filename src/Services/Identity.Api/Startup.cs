@@ -69,7 +69,7 @@
                 new IdentityServer4.Models.Client
                 {
                     ClientId = "client",
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets =
                     {
                         new IdentityServer4.Models.Secret("secret".Sha256())
