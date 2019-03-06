@@ -21,6 +21,7 @@
     using IdentityServer4.EntityFramework.Entities;
     using IdentityServer4.Models;
     using IdentityServer4.Test;
+    using Microsoft.AspNetCore.Identity.UI;
 
     public class Startup
     {
@@ -33,10 +34,21 @@
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddDefaultUI(UIFramework.Bootstrap4)
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
+                .AddInMemoryPersistedGrants()
+                .AddInMemoryIdentityResources(GetIdentityResources())
                 .AddInMemoryApiResources(GetApiResources())
-                .AddInMemoryClients(GetClients());
+                .AddInMemoryClients(GetClients())
+                .AddAspNetIdentity<ApplicationUser>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -57,7 +69,14 @@
             app.UseIdentityServer();
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseStaticFiles();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
 
         public static IEnumerable<IdentityServer4.Models.Client> GetClients()
@@ -103,6 +122,15 @@
             return new List<IdentityServer4.Models.ApiResource>
             {
                 new IdentityServer4.Models.ApiResource("api1", "My API")
+            };
+        }
+
+        public static IEnumerable<IdentityServer4.Models.IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityServer4.Models.IdentityResource>
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile(),
             };
         }
 
