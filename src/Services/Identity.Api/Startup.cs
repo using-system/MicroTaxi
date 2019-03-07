@@ -1,27 +1,25 @@
 ﻿namespace Identity.Api
 {
-    using System;
+    using System.Linq;
+    using System.Collections.Generic;
     using System.Reflection;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Identity.UI;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
     using Identity.Api.Application.Data;
     using Identity.Api.Application.Models;
-    using IdentityServer4.Services;
 
-    using Identity.Api.Application.Certificate;
-    using Identity.Api.Application.Services;
-    using System.Collections.Generic;
-    using IdentityServer4.EntityFramework.Entities;
     using IdentityServer4.Models;
     using IdentityServer4.Test;
-    using Microsoft.AspNetCore.Identity.UI;
+    using IdentityServer4.EntityFramework.DbContexts;
+    using IdentityServer4.EntityFramework.Mappers;
 
     public class Startup
     {
@@ -42,12 +40,25 @@
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
-                .AddInMemoryPersistedGrants()
-                .AddInMemoryIdentityResources(GetIdentityResources())
-                .AddInMemoryApiResources(GetApiResources())
-                .AddInMemoryClients(GetClients())
+                .AddTestUsers(GetUsers())
+                .AddConfigurationStore(options =>
+                {
+                    options.ConfigureDbContext = b =>
+                        b.UseSqlServer(connectionString,
+                            sql => sql.MigrationsAssembly(migrationsAssembly));
+                })
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = b =>
+                        b.UseSqlServer(connectionString,
+                            sql => sql.MigrationsAssembly(migrationsAssembly));
+
+                    options.EnableTokenCleanup = true;
+                })
                 .AddAspNetIdentity<ApplicationUser>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -56,13 +67,14 @@
        
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            this.InitializeDatabase(app);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -79,7 +91,44 @@
             });
         }
 
-        public static IEnumerable<IdentityServer4.Models.Client> GetClients()
+        private void InitializeDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+
+                var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+                context.Database.Migrate();
+                if (!context.Clients.Any())
+                {
+                    foreach (var client in GetClients())
+                    {
+                        context.Clients.Add(client.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+
+                if (!context.IdentityResources.Any())
+                {
+                    foreach (var resource in GetIdentityResources())
+                    {
+                        context.IdentityResources.Add(resource.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+
+                if (!context.ApiResources.Any())
+                {
+                    foreach (var resource in GetApiResources())
+                    {
+                        context.ApiResources.Add(resource.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        private static IEnumerable<IdentityServer4.Models.Client> GetClients()
         {
             return new List<IdentityServer4.Models.Client>
             {
@@ -98,7 +147,7 @@
             };
         }
 
-        public static List<TestUser> GetUsers()
+        private static List<TestUser> GetUsers()
         {
             return new List<TestUser>
             {
@@ -117,7 +166,7 @@
             };
         }
 
-        public static IEnumerable<IdentityServer4.Models.ApiResource> GetApiResources()
+        private static IEnumerable<IdentityServer4.Models.ApiResource> GetApiResources()
         {
             return new List<IdentityServer4.Models.ApiResource>
             {
@@ -125,7 +174,7 @@
             };
         }
 
-        public static IEnumerable<IdentityServer4.Models.IdentityResource> GetIdentityResources()
+        private static IEnumerable<IdentityServer4.Models.IdentityResource> GetIdentityResources()
         {
             return new List<IdentityServer4.Models.IdentityResource>
             {
