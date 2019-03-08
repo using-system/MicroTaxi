@@ -42,8 +42,9 @@
         /// </summary>
         /// <param name="command">The command.</param>
         /// <returns></returns>
+        [Route("")]
         [HttpPost]
-        public async Task<IActionResult> RequestTrip([FromBody] RequestTripCommand command)
+        public async Task<IActionResult> Post([FromBody] RequestTripCommand command)
         {
             var commandResult = await mediator.Send(command);
 
