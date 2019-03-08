@@ -10,7 +10,7 @@
     {
         async static Task Main(string[] args)
         {
-            await Task.Delay(1000);
+            await Task.Delay(3000);
 
             var disco = await DiscoveryClient.GetAsync("https://localhost:5001");
             if (disco.IsError)

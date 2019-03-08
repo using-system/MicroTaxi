@@ -23,10 +23,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TripController" /> class.
         /// </summary>
+        /// <param name="mediator">The mediator.</param>
         /// <exception cref="ArgumentNullException">mediator</exception>
-        public TripController()
+        public TripController(IMediator mediator)
         {
-            this.mediator = null;
+            this.mediator = mediator;
         }
 
         [Route("")]
