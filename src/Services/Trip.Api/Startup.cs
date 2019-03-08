@@ -21,16 +21,15 @@
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-
             services.AddCors();
 
             services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "https://localhost:5001";
+                    options.Authority = this.Configuration["STS:Uri"];
                     options.RequireHttpsMetadata = false;
 
-                    options.ApiName = "api1";
+                    options.ApiName = this.Configuration["STS:Api"];
                 });
 
         }
