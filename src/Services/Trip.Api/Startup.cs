@@ -1,12 +1,14 @@
 ﻿namespace Trip.Api
 {
     using System;
+    using System.Reflection;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.EntityFrameworkCore;
 
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
@@ -35,6 +37,19 @@
 
                     options.ApiName = this.Configuration["STS:Api"];
                 });
+
+            services.AddEntityFrameworkSqlServer()
+                   .AddDbContext<Infrastructure.Data.TripContext>(options =>
+                   {
+                       options.UseSqlServer(this.Configuration["TripDb"],
+                           sqlServerOptionsAction: sqlOptions =>
+                           {
+                               sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+                               sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                           });
+                   },
+                       ServiceLifetime.Scoped 
+                   );
 
             var container = new ContainerBuilder();
             container.Populate(services);
