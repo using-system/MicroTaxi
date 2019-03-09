@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Mvc", "src\Web\Web.Mvc\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{7107726A-5FCB-4C6C-91B5-70A307DF6D7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "src\App\ConsoleApp\ConsoleApp.csproj", "{8FCA509F-76AA-4D33-863B-6AB16012FC18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "src\App\ConsoleApp\ConsoleApp.csproj", "{8FCA509F-76AA-4D33-863B-6AB16012FC18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trip.Domain", "src\Services\Trip.Domain\Trip.Domain.csproj", "{FECC60DE-0DD0-4E19-BCDA-E8BE5172DFF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{8FCA509F-76AA-4D33-863B-6AB16012FC18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FCA509F-76AA-4D33-863B-6AB16012FC18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FCA509F-76AA-4D33-863B-6AB16012FC18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FECC60DE-0DD0-4E19-BCDA-E8BE5172DFF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FECC60DE-0DD0-4E19-BCDA-E8BE5172DFF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FECC60DE-0DD0-4E19-BCDA-E8BE5172DFF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FECC60DE-0DD0-4E19-BCDA-E8BE5172DFF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{229E432B-AD0F-4795-A3E6-0663CFB843A6} = {7107726A-5FCB-4C6C-91B5-70A307DF6D7E}
 		{7107726A-5FCB-4C6C-91B5-70A307DF6D7E} = {33069458-861D-49CD-A354-EABE031EBAD3}
 		{8FCA509F-76AA-4D33-863B-6AB16012FC18} = {7107726A-5FCB-4C6C-91B5-70A307DF6D7E}
+		{FECC60DE-0DD0-4E19-BCDA-E8BE5172DFF4} = {7E465CDD-A6B8-48C1-A684-48DC6759B6AE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D3A46332-1866-40E3-BBB6-A54A5C7F0153}
