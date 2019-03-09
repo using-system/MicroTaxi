@@ -1,12 +1,14 @@
 ﻿namespace Trip.Api.Infrastructure.Data
 {
+    using System.Threading;
+    using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
 
     /// <summary>
     /// Trip Context
     /// </summary>
     /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
-    public class TripContext : DbContext
+    public class TripContext : DbContext, Domain.IUnitOfWork
     {
         public DbSet<Domain.Trip> Trips { get; set; }
 
@@ -34,6 +36,18 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new EntityConfigurations.TripEntityConfiguration());
+        }
+
+        /// <summary>
+        /// Saves the entities asynchronous.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            await base.SaveChangesAsync();
+
+            return true;
         }
     }
 }

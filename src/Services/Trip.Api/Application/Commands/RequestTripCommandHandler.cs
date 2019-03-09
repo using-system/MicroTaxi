@@ -11,6 +11,17 @@
     /// <seealso cref="MediatR.IRequestHandler{Trip.Api.Application.Commands.RequestTripCommand, System.Boolean}" />
     public class RequestTripCommandHandler : IRequestHandler<RequestTripCommand, bool>
     {
+        private Domain.ITripRepository tripRepository;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestTripCommandHandler"/> class.
+        /// </summary>
+        /// <param name="tripRepository">The trip repository.</param>
+        public RequestTripCommandHandler(Domain.ITripRepository tripRepository)
+        {
+            this.tripRepository = tripRepository;
+        }
+
         /// <summary>
         /// Handles the specified request.
         /// </summary>
@@ -18,9 +29,14 @@
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public Task<bool> Handle(RequestTripCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(RequestTripCommand request, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            this.tripRepository.Add(new Domain.Trip()
+            {
+                PassengerID = request.PassengerID
+            });
+
+            return await this.tripRepository.UnitOfWork.SaveEntitiesAsync();
         }
     }
 }

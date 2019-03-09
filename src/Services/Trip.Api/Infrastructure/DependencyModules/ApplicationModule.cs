@@ -34,6 +34,10 @@
             builder.Register(c => new Application.Queries.TripQueries(this.connectionString))
                 .As<Application.Queries.ITripQueries>()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<Infrastructure.Data.Repositories.TripRepository>()
+                .As<Domain.ITripRepository>()
+                .InstancePerLifetimeScope();
         }
     }
 }

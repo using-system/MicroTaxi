@@ -8,6 +8,6 @@
     /// <seealso cref="MediatR.IRequest{System.Boolean}" />
     public class RequestTripCommand : IRequest<bool>
     {
-        public string Name { get; set; }
+        public int PassengerID { get; set; }
     }
 }

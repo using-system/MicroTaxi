@@ -3,7 +3,8 @@
     /// <summary>
     /// Entity base class
     /// </summary>
-    public abstract class EntityBase
+    /// <seealso cref="Trip.Domain.IEntity" />
+    public abstract class EntityBase : IEntity
     {
         /// <summary>
         /// Gets or sets the identifier.
