@@ -37,7 +37,7 @@
             this.tripQueries = tripQueries;
         }
 
-        [Route("{tripId: int}")]
+        [Route("{tripId:int}")]
         [HttpGet()]
         [ProducesResponseType(typeof(Trip), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -49,7 +49,7 @@
 
                 return Ok(trip);
             }
-            catch
+            catch(Exception exc)
             {
                 return NotFound();
             }

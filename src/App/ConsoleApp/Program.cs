@@ -34,7 +34,7 @@
         
             client.SetBearerToken(tokenResponse.AccessToken);
 
-            var response = await client.GetAsync("http://localhost:50002/api/v1/trip/");
+            var response = await client.GetAsync("http://localhost:5002/api/v1/trip/1");
             if (!response.IsSuccessStatusCode)
             {
                 Console.WriteLine(response.StatusCode);

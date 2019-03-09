@@ -36,7 +36,7 @@
 
                 return await connection.QueryFirstAsync<Model.Trip>(@"SELECT [Id] as TripID, [PassengerId] as PassengerID
                     FROM [Trip].[Trips]
-                    WHERE TripID = @id", new { id });
+                    WHERE Id = @id", new { id });
             }
         }
     }

@@ -48,7 +48,7 @@
                                sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                            });
                    },
-                       ServiceLifetime.Scoped 
+                       ServiceLifetime.Scoped
                    );
 
             var container = new ContainerBuilder();
