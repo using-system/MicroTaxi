@@ -41,7 +41,7 @@
             services.AddEntityFrameworkSqlServer()
                    .AddDbContext<Infrastructure.Data.TripContext>(options =>
                    {
-                       options.UseSqlServer(this.Configuration["TripDb"],
+                       options.UseSqlServer(this.Configuration.GetConnectionString("TripDb"),
                            sqlServerOptionsAction: sqlOptions =>
                            {
                                sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
@@ -55,6 +55,8 @@
             container.Populate(services);
 
             container.RegisterModule(new Infrastructure.DependencyModules.MediatorModule());
+            container.RegisterModule(
+                new Infrastructure.DependencyModules.ApplicationModule(this.Configuration.GetConnectionString("TripDb")));
 
             return new AutofacServiceProvider(container.Build());
         }

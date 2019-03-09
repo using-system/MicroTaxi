@@ -14,11 +14,12 @@
         private string connectionString;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TripQueries"/> class.
+        /// Initializes a new instance of the <see cref="TripQueries" /> class.
         /// </summary>
-        public TripQueries()
+        /// <param name="connectionString">The connection string.</param>
+        public TripQueries(string connectionString)
         {
-            this.connectionString = "";
+            this.connectionString = connectionString;
         }
 
         /// <summary>
