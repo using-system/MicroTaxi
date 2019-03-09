@@ -1,11 +1,15 @@
 ﻿namespace Trip.Api
 {
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using System;
+
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+
+    using Autofac;
+    using Autofac.Extensions.DependencyInjection;
 
     public class Startup
     {
@@ -17,24 +21,27 @@
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            var identityUrl = this.Configuration.GetValue<string>("IdentityUrl");
+            services.AddCors();
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            services.AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = this.Configuration["STS:Uri"];
+                    options.RequireHttpsMetadata = false;
 
-            }).AddJwtBearer(options =>
-            {
-                options.Authority = identityUrl;
-                options.RequireHttpsMetadata = false;
-                options.Audience = "trip";
-            });
+                    options.ApiName = this.Configuration["STS:Api"];
+                });
 
+            var container = new ContainerBuilder();
+            container.Populate(services);
+
+            container.RegisterModule(new Infrastructure.DependencyModules.MediatorModule());
+
+            return new AutofacServiceProvider(container.Build());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +56,12 @@
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
