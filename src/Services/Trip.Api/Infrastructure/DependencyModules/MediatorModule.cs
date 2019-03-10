@@ -6,6 +6,8 @@
 
     using MediatR;
 
+    using FluentValidation;
+
     /// <summary>
     /// Mediator Module
     /// </summary>
@@ -29,13 +31,19 @@
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
             builder.RegisterAssemblyTypes(typeof(Application.DomainEvent.Handlers.TripRequestedDomainEventHandler).GetTypeInfo().Assembly)
-              .AsClosedTypesOf(typeof(INotificationHandler<>));
+                .AsClosedTypesOf(typeof(INotificationHandler<>));
+
+            builder.RegisterAssemblyTypes(typeof(Application.Validators.RequestTripCommandValidator).GetTypeInfo().Assembly)
+                .Where(t => t.IsClosedTypeOf(typeof(IValidator<>)))
+                .AsImplementedInterfaces();
 
             builder.Register<ServiceFactory>(context =>
             {
                 var componentContext = context.Resolve<IComponentContext>();
                 return t => { object o; return componentContext.TryResolve(t, out o) ? o : null; };
             });
+
+            builder.RegisterGeneric(typeof(Behaviors.ValidatorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
         }
     }
 }
