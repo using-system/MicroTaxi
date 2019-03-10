@@ -26,7 +26,7 @@
         /// <param name="mediator">The mediator.</param>
         public TripContext(DbContextOptions<TripContext> options, IMediator mediator) : base(options)
         {
-
+            this.mediator = mediator;
         }
 
         /// <summary>
