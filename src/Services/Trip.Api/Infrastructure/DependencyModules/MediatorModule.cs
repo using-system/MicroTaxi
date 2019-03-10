@@ -30,7 +30,7 @@
             builder.RegisterAssemblyTypes(typeof(Application.Commands.RequestTripCommand).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
 
-            builder.RegisterAssemblyTypes(typeof(Application.DomainEvent.Handlers.TripRequestedDomainEventHandler).GetTypeInfo().Assembly)
+            builder.RegisterAssemblyTypes(typeof(Application.DomainEvent.Handlers.TripCreatedDomainEventHandler).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(INotificationHandler<>));
 
             builder.RegisterAssemblyTypes(typeof(Application.Validators.RequestTripCommandValidator).GetTypeInfo().Assembly)

@@ -3,9 +3,9 @@
     using MediatR;
 
     /// <summary>
-    /// Trip Requested Domain Event
+    /// Trip Created Domain Event
     /// </summary>
-    public class TripRequestedDomainEvent : INotification
+    public class TripCreatedDomainEvent : INotification
     {
         /// <summary>
         /// Gets the trip.
@@ -16,10 +16,10 @@
         public Trip Trip { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TripRequestedDomainEvent"/> class.
+        /// Initializes a new instance of the <see cref="TripCreatedDomainEvent"/> class.
         /// </summary>
         /// <param name="trip">The trip.</param>
-        public TripRequestedDomainEvent(Trip trip)
+        public TripCreatedDomainEvent(Trip trip)
         {
             this.Trip = trip;
         }

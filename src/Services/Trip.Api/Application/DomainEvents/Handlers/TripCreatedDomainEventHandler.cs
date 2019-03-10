@@ -6,10 +6,10 @@
     using MediatR;
 
     /// <summary>
-    /// TripRequestedDomainEvent Handler
+    /// TripCreatedDomain EventHandler
     /// </summary>
-    /// <seealso cref="MediatR.INotificationHandler{Trip.Domain.TripRequestedDomainEvent}" />
-    public class TripRequestedDomainEventHandler : INotificationHandler<Domain.TripRequestedDomainEvent>
+    /// <seealso cref="MediatR.INotificationHandler{Trip.Domain.TripCreatedDomainEvent}" />
+    public class TripCreatedDomainEventHandler : INotificationHandler<Domain.TripCreatedDomainEvent>
     {
         /// <summary>
         /// Handles the specified notification.
@@ -18,7 +18,7 @@
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public Task Handle(Domain.TripRequestedDomainEvent notification, CancellationToken cancellationToken)
+        public Task Handle(Domain.TripCreatedDomainEvent notification, CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
         }

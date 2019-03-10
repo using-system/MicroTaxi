@@ -25,4 +25,8 @@
     <ProjectReference Include="..\Trip.Domain\Trip.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\IntegrationEvents\" />
+  </ItemGroup>
+
 </Project>

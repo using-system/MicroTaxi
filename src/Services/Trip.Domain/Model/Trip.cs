@@ -21,7 +21,7 @@
                 PassengerID = passengerID
             };
 
-            trip.AddDomainEvent(new TripRequestedDomainEvent(trip));
+            trip.AddDomainEvent(new TripCreatedDomainEvent(trip));
 
             return trip;
         }
