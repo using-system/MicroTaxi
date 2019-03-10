@@ -31,10 +31,7 @@
         /// <exception cref="System.NotImplementedException"></exception>
         public async Task<bool> Handle(RequestTripCommand request, CancellationToken cancellationToken)
         {
-            this.tripRepository.Add(new Domain.Trip()
-            {
-                PassengerID = request.PassengerID
-            });
+            this.tripRepository.Add(Domain.Trip.New(request.PassengerID));
 
             return await this.tripRepository.UnitOfWork.SaveEntitiesAsync();
         }
