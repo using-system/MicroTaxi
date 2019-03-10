@@ -2,7 +2,12 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
+
     using Microsoft.EntityFrameworkCore;
+
+    using MediatR;
+
+    using Extensions;
 
     /// <summary>
     /// Trip Context
@@ -10,13 +15,16 @@
     /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
     public class TripContext : DbContext, Domain.IUnitOfWork
     {
+        private readonly IMediator mediator;
+
         public DbSet<Domain.Trip> Trips { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TripContext"/> class.
+        /// Initializes a new instance of the <see cref="TripContext" /> class.
         /// </summary>
         /// <param name="options">The options.</param>
-        public TripContext(DbContextOptions<TripContext> options) : base(options)
+        /// <param name="mediator">The mediator.</param>
+        public TripContext(DbContextOptions<TripContext> options, IMediator mediator) : base(options)
         {
 
         }
@@ -45,6 +53,8 @@
         /// <returns></returns>
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+            await this.mediator.DispatchDomainEventsAsync(this);
+
             await base.SaveChangesAsync();
 
             return true;
