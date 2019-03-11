@@ -51,6 +51,8 @@
                        ServiceLifetime.Scoped
                    );
 
+            services.AddSingleton<EventBus.IEventBus, EventBus.DefaultEventBus>();
+
             var hc = services.AddHealthChecks();
             hc.AddSqlServer(this.Configuration.GetConnectionString("TripDb"), name: "TripDB Check",
                 tags: new string[] {"Database"});

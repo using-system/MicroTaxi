@@ -1,32 +1,42 @@
 ﻿namespace EventBus
 {
     /// <summary>
-    /// Event bus service contract
+    /// Default event bus
     /// </summary>
-    public interface IEventBus
+    /// <seealso cref="EventBus.IEventBus" />
+    public class DefaultEventBus : IEventBus
     {
         /// <summary>
         /// Publishes the specified event.
         /// </summary>
         /// <param name="event">The event.</param>
-        void Publish(IntegrationEvent @event);
+        public void Publish(IntegrationEvent @event)
+        {
+
+        }
 
         /// <summary>
         /// Subscribes this instance.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TH">The type of the h.</typeparam>
-        void Subscribe<T, TH>()
+        public void Subscribe<T, TH>()
             where T : IntegrationEvent
-            where TH : IIntegrationEventHandler<T>;
+            where TH : IIntegrationEventHandler<T>
+        {
+
+        }
 
         /// <summary>
         /// Unsubscribes this instance.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TH">The type of the h.</typeparam>
-        void Unsubscribe<T, TH>()
+        public void Unsubscribe<T, TH>()
+            where T : IntegrationEvent
             where TH : IIntegrationEventHandler<T>
-            where T : IntegrationEvent;
+        {
+
+        }
     }
 }
