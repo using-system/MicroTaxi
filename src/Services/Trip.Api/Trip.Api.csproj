@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Framework\EventBus\EventBus.csproj" />
     <ProjectReference Include="..\Trip.Domain\Trip.Domain.csproj" />
   </ItemGroup>
 
