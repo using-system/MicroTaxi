@@ -43,7 +43,8 @@
                 return t => { object o; return componentContext.TryResolve(t, out o) ? o : null; };
             });
 
-            builder.RegisterGeneric(typeof(Behaviors.ValidatorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+            builder.RegisterGeneric(typeof(Application.Behaviors.ValidatorBehavior<,>)).As(typeof(IPipelineBehavior<,>));
+            builder.RegisterGeneric(typeof(Application.Behaviors.TransactionBehaviour<,>)).As(typeof(IPipelineBehavior<,>));
         }
     }
 }

@@ -1,9 +1,12 @@
 ﻿namespace Trip.Api.Infrastructure.Data
 {
+    using System;
+    using System.Data;
     using System.Threading;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Storage;
 
     using MediatR;
 
@@ -18,6 +21,13 @@
         private readonly IMediator mediator;
 
         public DbSet<Domain.Trip> Trips { get; set; }
+
+        private IDbContextTransaction currentTransaction;
+
+
+        public IDbContextTransaction GetCurrentTransaction => currentTransaction;
+
+        public bool HasActiveTransaction => currentTransaction != null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TripContext" /> class.
@@ -46,6 +56,56 @@
             modelBuilder.ApplyConfiguration(new EntityConfigurations.TripEntityConfiguration());
         }
 
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            if (currentTransaction != null) return null;
+
+            currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+
+            return currentTransaction;
+        }
+
+        public async Task CommitTransactionAsync(IDbContextTransaction transaction)
+        {
+            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+            if (transaction != currentTransaction) throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
+
+            try
+            {
+                await SaveChangesAsync();
+                transaction.Commit();
+            }
+            catch
+            {
+                RollbackTransaction();
+                throw;
+            }
+            finally
+            {
+                if (currentTransaction != null)
+                {
+                    currentTransaction.Dispose();
+                    currentTransaction = null;
+                }
+            }
+        }
+
+        public void RollbackTransaction()
+        {
+            try
+            {
+                currentTransaction?.Rollback();
+            }
+            finally
+            {
+                if (currentTransaction != null)
+                {
+                    currentTransaction.Dispose();
+                    currentTransaction = null;
+                }
+            }
+        }
+
         /// <summary>
         /// Saves the entities asynchronous.
         /// </summary>
@@ -59,5 +119,6 @@
 
             return true;
         }
+
     }
 }

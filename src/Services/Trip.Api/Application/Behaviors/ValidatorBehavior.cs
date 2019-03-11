@@ -1,4 +1,4 @@
-﻿namespace Trip.Api.Infrastructure.Behaviors
+﻿namespace Trip.Api.Application.Behaviors
 {
     using System.Linq;
     using System.Threading;
