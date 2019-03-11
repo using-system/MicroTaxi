@@ -51,6 +51,10 @@
                        ServiceLifetime.Scoped
                    );
 
+            var hc = services.AddHealthChecks();
+            hc.AddSqlServer(this.Configuration.GetConnectionString("TripDb"), name: "TripDB Check",
+                tags: new string[] {"Database"});
+
             var container = new ContainerBuilder();
             container.Populate(services);
 
@@ -79,6 +83,8 @@
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
+
+            app.UseHealthChecks("/diag");
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
