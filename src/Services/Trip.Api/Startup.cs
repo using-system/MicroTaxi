@@ -51,6 +51,8 @@
                        ServiceLifetime.Scoped
                    );
 
+            services
+                .AddTransient<Application.IntegrationEvents.ITripIntegrationEventService, Application.IntegrationEvents.TripIntegrationEventService>();
             services.AddSingleton<EventBus.IEventBus, EventBus.DefaultEventBus>();
 
             var hc = services.AddHealthChecks();
