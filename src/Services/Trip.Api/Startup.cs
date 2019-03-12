@@ -39,7 +39,7 @@
                 });
 
             services.AddEntityFrameworkSqlServer()
-                   .AddDbContext<Infrastructure.Data.TripContext>(options =>
+                   .AddDbContext<Infrastructure.EntityFramework.TripContext>(options =>
                    {
                        options.UseSqlServer(this.Configuration.GetConnectionString("TripDb"),
                            sqlServerOptionsAction: sqlOptions =>
