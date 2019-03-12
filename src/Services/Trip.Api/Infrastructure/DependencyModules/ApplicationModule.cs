@@ -1,5 +1,7 @@
 ﻿namespace Trip.Api.Infrastructure.DependencyModules
 {
+    using System.Reflection;
+
     using Autofac;
 
     /// <summary>
@@ -35,9 +37,9 @@
                 .As<Application.Queries.ITripQueries>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<Infrastructure.Data.Repositories.TripRepository>()
-                .As<Domain.ITripRepository>()
-                .InstancePerLifetimeScope();
+            //Register all repositories
+            builder.RegisterAssemblyTypes(typeof(Infrastructure.Data.Repositories.TripRepository).GetTypeInfo().Assembly)
+             .AsClosedTypesOf(typeof(Domain.IRepository<>));
         }
     }
 }
