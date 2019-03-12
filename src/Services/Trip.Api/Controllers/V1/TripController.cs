@@ -49,7 +49,7 @@
 
                 return Ok(trip);
             }
-            catch(Exception exc)
+            catch
             {
                 return NotFound();
             }
