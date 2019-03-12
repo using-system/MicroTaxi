@@ -1,4 +1,4 @@
-﻿namespace Trip.Api.Infrastructure.Data.Repositories
+﻿namespace Trip.Api.Infrastructure.EntityFramework.Repositories
 {
     /// <summary>
     /// Trip Repository

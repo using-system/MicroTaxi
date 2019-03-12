@@ -1,4 +1,4 @@
-﻿namespace Trip.Api.Infrastructure.Data
+﻿namespace Trip.Api.Infrastructure.EntityFramework
 {
     using System;
     using System.Data;
@@ -53,7 +53,7 @@
         /// </remarks>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new EntityConfigurations.TripEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new Configurations.TripEntityConfiguration());
         }
 
         public async Task<IDbContextTransaction> BeginTransactionAsync()

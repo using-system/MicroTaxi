@@ -11,7 +11,7 @@
     using MediatR;
 
     using Trip.Api.Application.IntegrationEvents;
-    using Trip.Api.Infrastructure.Data;
+    using Trip.Api.Infrastructure.EntityFramework;
 
 
     /// <summary>

@@ -38,7 +38,7 @@
                 .InstancePerLifetimeScope();
 
             //Register all repositories
-            builder.RegisterAssemblyTypes(typeof(Infrastructure.Data.Repositories.TripRepository).GetTypeInfo().Assembly)
+            builder.RegisterAssemblyTypes(typeof(Infrastructure.EntityFramework.Repositories.TripRepository).GetTypeInfo().Assembly)
              .AsClosedTypesOf(typeof(Domain.IRepository<>));
         }
     }

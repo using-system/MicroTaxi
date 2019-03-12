@@ -1,4 +1,4 @@
-﻿namespace Trip.Api.Infrastructure.Data.EntityConfigurations
+﻿namespace Trip.Api.Infrastructure.EntityFramework.Configurations
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
